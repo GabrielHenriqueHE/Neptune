@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema<Omit<IUser, "_id" | "createdAt" | "update
         required: false,
         ref: 'wallets'
     }
-});
+}, { timestamps: true });
 
 UserSchema.pre("save", async function() {
     const encryptedPassword = await bcrypt.hash(this.password, 10);

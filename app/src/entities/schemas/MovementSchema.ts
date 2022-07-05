@@ -28,6 +28,6 @@ const MovementSchema = new mongoose.Schema<Omit<IMovement, "_id" | "createdAt" |
         type: Number,
         required: true,
     }
-});
+}, { timestamps: true });
 
 export default MovementSchema;

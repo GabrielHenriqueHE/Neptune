@@ -12,6 +12,6 @@ const WalletSchema = new mongoose.Schema<Omit<IWallet, "_id" | "createdAt" | "up
         required: true,
         ref: 'movements'
     }]
-});
+}, { timestamps: true });
 
 export default WalletSchema;
