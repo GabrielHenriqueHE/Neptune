@@ -11,6 +11,16 @@ export class AuthenticateUserUseCase {
         private userRepository: IUserRepository
     ){}
 
+    /*
+    * Receive an email and password and tells userRepository to check if user exists
+    * If user doesn't exists, it throw a new error alerting that data must be wrong
+    * Else, it compare the password received with user password
+    * If passwords doesn't matches, it throw a new error alerting that data must be wrong
+    * Else, it generate a new token as string and returns it
+    * 
+    * Returns: string 
+    */
+
     async execute({ email, password }: IAuthRequest): Promise<string> {
         
         const userAlreadyExists = await this.userRepository.authenticate(email);

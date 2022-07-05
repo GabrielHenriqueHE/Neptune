@@ -7,7 +7,15 @@ export class CreateUserController {
         private CreateUserUseCase: CreateUserUseCase
     ){}
 
-    async handle(req: Request, res: Response): Promise<any> {
+    /*
+    * Receive a Request and Response interface
+    * It tries to execute the CreateUserUseCase and if is alright returns an "ok" message
+    * If it goes wrong, returns an "error" message
+    * 
+    * Returns: Response
+    */
+
+    async handle(req: Request, res: Response): Promise<Response> {
         const { name, email, password } = req.body;
 
         try {

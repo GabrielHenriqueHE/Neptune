@@ -9,6 +9,14 @@ export class CreateUserUseCase {
         private createWalletUseCase: CreateWalletUseCase
     ){}
 
+    /* 
+    * Checks if user already exists
+    * If user already exists, it will throw a new error
+    * Else, it tells to repository to create a new user
+    * 
+    * Returns: void
+    */ 
+
     async execute(data: Omit<IUser, "wallet" | "_id" | "createdAt" | "updatedAt">): Promise<void> {
 
         if (await this.UserRepository.findByEmail(data.email)) {
