@@ -37,7 +37,7 @@ export class AuthenticateUserUseCase {
 
         const token = sign({}, config.secret, {
             subject: userAlreadyExists.id,
-            expiresIn: "50s"
+            expiresIn: "1d"
         })
 
         return token;

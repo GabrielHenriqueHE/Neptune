@@ -1,12 +1,27 @@
 import { Request, Response, Router } from "express";
-import { authenticateUserController } from "./useCases/AuthenticateUser";
 
 import { createUserController } from "./useCases/CreateUser/index";
+
+import { authenticateUserController } from "./useCases/AuthenticateUser";
+import { ensureAuthenticatedUseCase } from "./useCases/EnsureAuthenticated";
 
 const router = Router();
 
 router.get("/", (req: Request, res: Response) => {
     return res.status(200).json({ message: "Ok" })
+})
+
+router.get("/courses", ensureAuthenticatedUseCase.execute, (req, res) => {
+    return res.status(200).json([
+        {
+            id: 1,
+            course: "Web Development"
+        },
+        {
+            id: 2,
+            course: "Data Science"
+        }
+    ])
 })
 
 router.post("/users", async (req: Request, res: Response) => {
