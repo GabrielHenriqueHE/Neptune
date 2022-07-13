@@ -11,6 +11,12 @@ export class RefreshTokenRepository implements IRefreshTokenRepository{
         private repository: mongoose.Model<Omit<IRefreshToken, "_id">>
     ){}
 
+    /*
+    *   Receives userId and create a new refresh token
+    *   
+    *   Returns: Promise<mongoose.HydratedDocument | null>
+    */
+
     async create(userId: string): Promise<mongoose.HydratedDocument<IRefreshToken, any, any> | null> {
         const expiresIn = dayjs().add(24, "hour").unix();
         
@@ -26,11 +32,23 @@ export class RefreshTokenRepository implements IRefreshTokenRepository{
         }
     }
 
+    /*
+    *   Receives userId and delete documents that contains it
+    *
+    *   Returns: Promise<void>  
+    */
+
     async deleteMany(userId: string): Promise<void> {
         await this.repository.deleteMany({
             userId: userId
         })
     }
+
+    /*
+    *   Receives a refreshToken and checks if it already exists
+    *
+    *   Returns: Promise<mongoose.HydratedDocument | null>
+    */
 
     async find(refreshToken: string): Promise<mongoose.HydratedDocument<IRefreshToken, any, any> | null> {
         try {
@@ -42,7 +60,7 @@ export class RefreshTokenRepository implements IRefreshTokenRepository{
     
             return token;
         } catch (error) {
-            console.log("Refresh token id is malformatted or refresh token doesn't exists")
+            console.log("Refresh token is malformatted")
         }
     }
 }

@@ -12,7 +12,7 @@ export class CreateUserController {
     * It tries to execute the CreateUserUseCase and if is alright returns an "ok" message
     * If it goes wrong, returns an "error" message
     * 
-    * Returns: Response
+    * Returns: Promise<Response>
     */
 
     async handle(req: Request, res: Response): Promise<Response> {

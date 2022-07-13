@@ -8,7 +8,15 @@ export class RefreshTokenController {
         private refreshTokenUseCase: RefreshTokenUseCase
     ){}
 
-    async handle(req: Request, res: Response): Promise<Response | void> {
+    /*
+    * Receive a Request and Response interface
+    * It tries to execute the refreshTokenUseCase and returns a new token
+    * If it goes wrong, returns an "error" message
+    * 
+    * Returns: Promise<Response>
+    */
+
+    async handle(req: Request, res: Response): Promise<Response> {
         const { refreshToken } = req.body;        
 
         try {
