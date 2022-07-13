@@ -4,6 +4,7 @@ import { createUserController } from "./useCases/CreateUser/index";
 
 import { authenticateUserController } from "./useCases/AuthenticateUser";
 import { ensureAuthenticatedUseCase } from "./useCases/EnsureAuthenticated";
+import { refreshTokenController } from "./useCases/RefreshToken";
 
 const router = Router();
 
@@ -30,6 +31,10 @@ router.post("/users", async (req: Request, res: Response) => {
 
 router.post("/authenticate", async (req, res) => {
     return await authenticateUserController.handle(req, res);
+})
+
+router.post("/authenticate/refresh", async (req, res) => {
+    return await refreshTokenController.handle(req, res);
 })
 
 export default router;

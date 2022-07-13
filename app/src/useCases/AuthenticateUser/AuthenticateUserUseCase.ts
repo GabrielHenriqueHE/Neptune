@@ -1,14 +1,16 @@
 import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
-import { IAuthRequest } from "../../entities/interfaces/IAuthRequest";
-import { IUserRepository } from "../../entities/repositories/IUserRepository";
 
 import config from "../../../bin/configs/config.json";
+import { IAuthRequest } from "../../entities/interfaces/IAuthRequest";
+import { IUserRepository } from "../../entities/repositories/IUserRepository";
+import { TokenProvider } from "../../entities/provider/TokenProvider";
 
 export class AuthenticateUserUseCase {
 
     constructor (
-        private userRepository: IUserRepository
+        private userRepository: IUserRepository,
+        private TokenProvider: TokenProvider
     ){}
 
     /*
@@ -18,29 +20,30 @@ export class AuthenticateUserUseCase {
     * If passwords doesn't matches, it throw a new error alerting that data must be wrong
     * Else, it generate a new token as string and returns it
     * 
-    * Returns: string 
+    * Returns: object { token, refreshToken } 
     */
 
-    async execute({ email, password }: IAuthRequest): Promise<string> {
+    async execute({ email, password }: IAuthRequest): Promise<Object> {
         
-        const userAlreadyExists = await this.userRepository.authenticate(email);
+        const user = await this.userRepository.authenticate(email);
 
-        if (!userAlreadyExists) {
+        if (!user) {
             throw new Error("Incorrect user or password.");
         }
 
-        const passwordMatch = await compare(password, userAlreadyExists.password)
+        const passwordMatch = await compare(password, user.password)
         
         if (!passwordMatch) {
             throw new Error("Incorrect user or password.");
         }
 
-        const token = sign({}, config.secret, {
-            subject: userAlreadyExists.id,
-            expiresIn: "1d"
-        })
+        const token = await this.TokenProvider.generateToken(user.id);
+        const refreshToken = await this.TokenProvider.generateRefreshToken(user.id);
 
-        return token;
+        return {
+            token,
+            refreshToken
+        };
         
     }
 }
